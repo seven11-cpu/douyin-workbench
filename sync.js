@@ -67,14 +67,21 @@ const SYNC = {
 let _syncTimer = null;
 function scheduleSync(){ if(typeof SYNC==='undefined'||!SYNC.enabled()) return; clearTimeout(_syncTimer); _syncTimer = setTimeout(()=>SYNC.push(), 900); }
 
-/* 页面里填入/更换同步令牌 */
+/* 页面里填入/更换同步令牌（弹窗，避开 iOS 对 prompt 的限制） */
 function setupSync(){
-  const cur = localStorage.getItem('ws_sync_token')||'';
-  const t = prompt('粘贴你的同步访问令牌（细粒度 PAT，仅授权 douyin-workbench 一个仓库的 Contents 读写）：', cur);
-  if(t===null) return;
-  const v = t.trim();
-  if(!v){ localStorage.removeItem('ws_sync_token'); toast('已清除同步令牌'); return; }
-  localStorage.setItem('ws_sync_token', v);
-  toast('同步令牌已保存 ✓');
-  SYNC.push();
+  if(typeof $==='undefined') return;
+  $('syncTokenInput').value = localStorage.getItem('ws_sync_token')||'';
+  $('syncModal').classList.add('show');
+  setTimeout(()=>{ try{$('syncTokenInput').focus();}catch(e){} }, 50);
+}
+function closeSyncModal(){ $('syncModal').classList.remove('show'); }
+function saveSyncToken(){
+  const v = $('syncTokenInput').value.trim();
+  if(!v){ localStorage.removeItem('ws_sync_token'); toast('已清除同步令牌'); }
+  else{ localStorage.setItem('ws_sync_token', v); toast('已保存，正在同步…'); }
+  closeSyncModal();
+  SYNC.pull(data=>{
+    if(data&&data.items&&Object.keys(data.items).length) SYNC.apply(data);
+    SYNC.push();
+  });
 }
