@@ -200,6 +200,12 @@
   .insp .why b,.insp .scope b{font-weight:700;margin-right:4px;color:var(--ink)}
   .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:#233026;color:#fff;font-size:13px;padding:9px 18px;border-radius:24px;opacity:0;pointer-events:none;transition:.25s;z-index:99}
   .toast.show{opacity:1}
+  .modal-mask{display:none;position:fixed;inset:0;background:rgba(0,0,0,.42);z-index:200;align-items:center;justify-content:center;padding:22px}
+  .modal-mask.show{display:flex}
+  .modal{background:#fff;border-radius:18px;padding:22px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+  .modal h3{font-size:17px;margin-bottom:10px}
+  .modal p{font-size:12.5px;color:var(--sub);line-height:1.7;margin-bottom:12px}
+  .modal input{width:100%;margin-bottom:4px}
   @media(max-width:860px){
     body{display:block}
     .mobile-header{display:flex}
@@ -384,6 +390,18 @@
 </main>
 
 <div class="toast" id="toast"></div>
+
+<div class="modal-mask" id="syncModal">
+  <div class="modal">
+    <h3>🔗 云同步设置</h3>
+    <p>粘贴 GitHub 访问令牌（细粒度 PAT，仅授权 <b>douyin-workbench</b> 一个仓库的 Contents 读写权限）。令牌只存在你本机浏览器，不会进代码。</p>
+    <input id="syncTokenInput" type="text" inputmode="text" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="ghp_... 或 github_pat_...">
+    <div style="margin-top:12px;text-align:right">
+      <button class="btn ghost sm" onclick="closeSyncModal()">取消</button>
+      <button class="btn sm" onclick="saveSyncToken()">保存并同步</button>
+    </div>
+  </div>
+</div>
 
 <script src="data.js"></script>
 <script src="sync.js"></script>
