@@ -1,0 +1,12 @@
+{
+  "name": "灵感搞钱中心",
+  "short_name": "搞钱工作台",
+  "start_url": "/douyin-workbench/",
+  "display": "standalone",
+  "background_color": "#eef3ee",
+  "theme_color": "#3e8e5a",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
