@@ -178,6 +178,10 @@
   .insp .row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
   .insp .row .copy,.insp .row .fav-btn{margin-left:auto}
   .insp .row .fav-btn{margin-left:6px}
+  .insp .why,.insp .scope{font-size:12px;color:var(--sub);border-radius:7px;padding:6px 9px;margin:5px 0;line-height:1.65}
+  .insp .why{background:var(--amber-soft);border-left:3px solid var(--amber)}
+  .insp .scope{background:var(--blue-soft);border-left:3px solid var(--blue)}
+  .insp .why b,.insp .scope b{font-weight:700;margin-right:4px;color:var(--ink)}
   .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:#233026;color:#fff;font-size:13px;padding:9px 18px;border-radius:24px;opacity:0;pointer-events:none;transition:.25s;z-index:99}
   .toast.show{opacity:1}
   @media(max-width:860px){aside{position:static;width:100%;flex-direction:row;flex-wrap:wrap;border-right:none;border-bottom:1px solid var(--border);overflow:visible}main{margin-left:0}body{flex-direction:column}.side-foot{margin-top:0;flex-direction:row}}
@@ -523,6 +527,8 @@ function renderInsp(){
   const list=ACC==='xiaohao'?(D.inspirations||[]):(D.dahaoInsp||[]);
   $('inspList').innerHTML=list.length?list.map(i=>`
     <div class="insp"><p>${esc(i.text)}</p>
+    <div class="why"><b>🔥 为什么能火</b>${esc(i.whyHot||'')}</div>
+    <div class="scope"><b>🎯 可借鉴范围</b>${esc(i.scope||'')}</div>
     <div class="row"><span class="tag">${esc(i.direction)}</span><span class="tag f">${esc(i.formula)}</span>
     <button class="copy" onclick="copyText('${jsq(i.text)}')">复制</button>
     <button class="fav-btn" onclick="addFav('${jsq(i.text)}','灵感库')">收藏</button></div></div>`).join('')
