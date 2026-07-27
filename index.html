@@ -385,10 +385,11 @@
 <div class="toast" id="toast"></div>
 
 <script src="data.js"></script>
+<script src="sync.js"></script>
 <script>
 const $=id=>document.getElementById(id);
 const todayKey=()=>new Date().toISOString().slice(0,10);
-const store={get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
+const store={get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set:(k,v)=>{localStorage.setItem(k,JSON.stringify(v)); if(k.indexOf('ws_')===0) scheduleSync();}};
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
 function copyText(s){navigator.clipboard?navigator.clipboard.writeText(s).then(()=>toast('已复制 ✓')):toast('请手动复制')}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -826,6 +827,13 @@ function renderAll(){
   $('draftInput').value=store.get('ws_buf_'+ACC,'')||'';countDraft();
 }
 renderChrome();renderAll();
+
+/* 云同步：打开页面自动从云端拉取最新数据（跨设备一致） */
+if(window.SYNC){
+  SYNC.pull(data=>{
+    if(data&&data.items&&Object.keys(data.items).length){ SYNC.apply(data); }
+  });
+}
 </script>
 </body>
 </html>
