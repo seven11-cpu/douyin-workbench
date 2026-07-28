@@ -499,7 +499,7 @@ const A=()=>ACCOUNTS[ACC];
 })();
 
 /* ===================== 全局数据 ===================== */
-const D=window.HOTSPOT_DATA||{douyin:{hotspots:[],rawTop:[]},xhs:{topics:[],cases:[]},inspirations:[],dahaoInsp:[],updatedAt:'--'};
+let D=window.HOTSPOT_DATA||{douyin:{hotspots:[],rawTop:[]},xhs:{topics:[],cases:[]},inspirations:[],dahaoInsp:[],updatedAt:'--'};
 $('updatedAt').textContent=D.updatedAt;
 const w=['日','一','二','三','四','五','六'],n=new Date();
 const dateStr=`${n.getFullYear()}年${n.getMonth()+1}月${n.getDate()}日 · 星期${w[n.getDay()]}`;
@@ -852,6 +852,8 @@ renderChrome();renderAll();
   const s=document.createElement('script');
   s.src='data.js?t='+Date.now();
   s.onload=()=>{
+    D=window.HOTSPOT_DATA||D;
+    $('updatedAt').textContent=D.updatedAt;
     try{ renderAll(); }catch(e){}
     if(window.SYNC){ SYNC.pull(data=>{ if(data&&data.items&&Object.keys(data.items).length){ SYNC.apply(data); } }); }
   };
