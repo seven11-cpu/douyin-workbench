@@ -847,12 +847,16 @@ function renderAll(){
 }
 renderChrome();renderAll();
 
-/* 云同步：打开页面自动从云端拉取最新数据（跨设备一致） */
-if(window.SYNC){
-  SYNC.pull(data=>{
-    if(data&&data.items&&Object.keys(data.items).length){ SYNC.apply(data); }
-  });
-}
+/* 强制重新拉取最新 data.js，绕过浏览器缓存；拉到后重渲染 + 启动云同步 */
+(function(){
+  const s=document.createElement('script');
+  s.src='data.js?t='+Date.now();
+  s.onload=()=>{
+    try{ renderAll(); }catch(e){}
+    if(window.SYNC){ SYNC.pull(data=>{ if(data&&data.items&&Object.keys(data.items).length){ SYNC.apply(data); } }); }
+  };
+  document.head.appendChild(s);
+})();
 </script>
 </body>
 </html>
